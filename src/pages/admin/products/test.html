@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Receipt print test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+    * { box-sizing: border-box; font-family: "Montserrat", sans-serif; }
+    body { background:#f3f3f3; display:flex; align-items:flex-start; justify-content:center; padding:20px; }
+
+    /* Receipt layout (screen preview) */
+    #receipt-area {
+      width: 58mm;
+      background: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      color: #000;
+      font-size: 12px;
+      line-height: 1.3;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .logo { text-align:center; margin-bottom:6px; }
+    .logo img { width:40px; height:auto; display:inline-block; }
+    .divider { border-bottom: 1px dashed #000; margin:6px 0; }
+    ul.items { list-style:none; padding:0; margin:0; max-height: 800px; }
+    ul.items li { display:flex; justify-content:space-between; margin-bottom:4px; word-break:break-word; }
+    .totals { margin-top:6px; border-top:1px dashed #000; padding-top:8px; }
+    .totals li { display:flex; justify-content:space-between; margin-bottom:4px; }
+    .bottom { text-align:center; margin-top:10px; font-size:11px; }
+
+    /* Ensure images don't blow width */
+    img { max-width:100%; height:auto; }
+
+    /* ------------------------
+       PRINT STYLES (important)
+       ------------------------ */
+
+    /* Use an explicitly large page height so printing doesn't clip.
+       Increase the second value if needed (2000mm is very large). */
+    @page {
+      size: 58mm 2000mm; /* width x height */
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        width: 58mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        overflow: visible !important;
+      }
+
+      /* Print only the receipt in a fresh window (we use open-print JS below). */
+      #receipt-area {
+        width: 58mm !important;
+        margin: 0 auto !important;
+        padding: 8px !important;
+        position: relative !important;
+        overflow: visible !important;
+        transform: none !important; /* prevent auto-scaling */
+        -webkit-transform: none !important;
+        page-break-inside: avoid !important;
+      }
+
+      /* Make text compact and avoid clipping */
+      #receipt-area * {
+        font-size: 10px !important;
+        line-height: 1.15 !important;
+        word-wrap: break-word !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="receipt-area" data-demo="true">
+    <div class="logo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Receipt.svg/1024px-Receipt.svg.png" alt="logo"></div>
+    <h2 style="text-align:center; font-size:14px; margin:0 0 6px;">Crown Store</h2>
+    <div class="divider"></div>
+
+    <div class="info" style="font-size:11px; margin-bottom:6px;">
+      <div>Date: 04/10/2025</div>
+      <div>Time: 02:32 PM</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h4 style="font-size:12px; margin:6px 0;">Items</h4>
+    <ul class="items">
+      <li><span>Golden Oil 1L (Large description to test wrapping)</span><span>₦2,000</span></li>
+      <li><span>Indomie Pack</span><span>₦1,800</span></li>
+      <li><span>Salt (Bag) — extra long name to test wrapping behavior on print</span><span>₦1,200</span></li>
+      <!-- repeat a bunch to emulate long receipt -->
+      <li><span>Item 4</span><span>₦300</span></li>
+      <li><span>Item 5</span><span>₦400</span></li>
+      <li><span>Item 6</span><span>₦350</span></li>
+      <li><span>Item 7</span><span>₦150</span></li>
+      <li><span>Item 8</span><span>₦500</span></li>
+      <li><span>Item 9</span><span>₦250</span></li>
+      <li><span>Item 10</span><span>₦100</span></li>
+      <li><span>Item 11</span><span>₦600</span></li>
+      <li><span>Item 12</span><span>₦120</span></li>
+      <li><span>Item 13</span><span>₦90</span></li>
+      <li><span>Item 14</span><span>₦320</span></li>
+    </ul>
+
+    <div class="totals" style="margin-top:8px;">
+      <ul style="list-style:none; padding:0; margin:0;">
+        <li style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Sub Total</span><span>₦6,000</span></li>
+        <li style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>VAT (0%)</span><span>₦0</span></li>
+        <li style="display:flex; justify-content:space-between; font-weight:600;"><span>Total</span><span>₦6,000</span></li>
+      </ul>
+    </div>
+
+    <div class="bottom">
+      <p style="margin:6px 0 0;">Thank you for shopping with us!</p>
+      <div style="margin-top:6px;">📞 08136758977</div>
+      <small style="display:block; margin-top:6px;">Please keep this receipt for your records</small>
+    </div>
+  </div>
+
+  <div style="margin-left:16px;">
+    <button onclick="openPrintWindow()" style="padding:8px 12px; font-size:14px;">Print (open in new print window)</button>
+    <p style="font-size:12px; color:#444; margin-top:8px;">Use Save as PDF first to check output. If it still cuts, increase <code>@page size height</code> in the file (currently 2000mm).</p>
+  </div>
+
+  <script>
+    function openPrintWindow() {
+      // Extract receipt HTML & inline styles and put into a new window
+      const receipt = document.getElementById('receipt-area').outerHTML;
+      // Extract the styles used above (for reliability we recreate minimal print CSS)
+      const css = `
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+        *{box-sizing:border-box;font-family:Montserrat, sans-serif;}
+        body{margin:0;padding:0;background:#fff;}
+        @page { size: 58mm 2000mm; margin:0; }
+        #receipt-area{width:58mm; padding:8px; font-size:10px; line-height:1.15; }
+        #receipt-area *{font-size:10px; line-height:1.15; word-wrap:break-word;}
+      `;
+
+      const w = window.open('', '_blank', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=1');
+      w.document.open();
+      w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print</title><style>${css}</style></head><body>${receipt}</body></html>`);
+      w.document.close();
+      w.focus();
+
+      // Give browser a short moment to layout before triggering print
+      setTimeout(() => {
+        w.print();
+        // Do not auto-close immediately on all browsers; give time and then close.
+        setTimeout(() => { try { w.close(); } catch(e) { /* ignore */ } }, 1000);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
