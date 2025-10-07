@@ -8,12 +8,6 @@ import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
 interface Rep {
   id: string;
   name: string;
