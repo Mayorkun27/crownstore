@@ -91,7 +91,7 @@ const ProductRow = ({
                         <button 
                             title='Remove from Cart'
                             type='button'
-                            className='border text-s cursor-pointer w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white border-red-600 text-red-600'
+                            className='border text-s cursor-pointer w-8 h-8 rounded-full flex items-center justify-center hover:back-red hover:text-white border-red-600 text-red-600'
                             onClick={removeAction}
                         >
                             <CiTrash />
@@ -113,7 +113,7 @@ const ProductRow = ({
                                     </button>
 
                                     <button
-                                        className={`${baseButtonClass} ${isDeleting ? disabledClass : 'bg-red-600 text-white hover:bg-red-700'}`}
+                                        className={`${baseButtonClass} ${isDeleting ? disabledClass : 'back-red text-white hover:bg-red-700'}`}
                                         disabled={isDeleting}
                                         onClick={() => onDelete?.(id)}
                                         title={isDeleting ? "Deleting..." : "Delete Product"}

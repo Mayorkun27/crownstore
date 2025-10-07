@@ -51,7 +51,7 @@ const Layout = ({ children }: LayoutProps) => {
               <button
                 type='button'
                 onClick={handleLogout}
-                className='bg-red-600 text-white flex items-center gap-2 p-2 rounded-md'
+                className='back-red text-white flex items-center gap-2 p-2 rounded-md'
               >
                 <IoIosLogOut />
                 <span>Logout</span>
