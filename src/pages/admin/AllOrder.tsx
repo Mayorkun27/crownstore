@@ -15,6 +15,7 @@ interface Order {
   items: OrderProduct[];
   total_amount: string;
   created_at: string;
+  issued_by: string;
 }
 
 interface AllOrdersData {
@@ -149,6 +150,9 @@ const AllOrder = () => {
                           <th className="px-2 py-3 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
                             Time
                           </th>
+                          <th className="px-2 py-3 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                            Issued By
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
@@ -173,6 +177,9 @@ const AllOrder = () => {
                             </td>
                             <td className="px-2 py-4 text-xs lg:text-sm text-gray-500">
                               {item.created_at.split(" ")[1]}
+                            </td>
+                            <td className="px-2 py-4 text-xs lg:text-sm text-gray-500">
+                              {item.issued_by}
                             </td>
                           </tr>
                         ))}
