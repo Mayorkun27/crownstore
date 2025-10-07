@@ -34,6 +34,7 @@ const Cart: React.FC<CartProps> = ({
 }) => {
   const receiptRef = useRef<HTMLDivElement | null>(null);
   const [isPrinting, setIsPrinting] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const date = new Date().toLocaleDateString();
   const time = new Date().toLocaleTimeString();
@@ -45,6 +46,7 @@ const Cart: React.FC<CartProps> = ({
   const tax = 0;
 
   const handleConfirmAndPrint = async () => {
+    setIsProcessing(true)
     if (cart.length === 0) {
       toast.error("Cart is empty. Please add items before confirming.");
       return;
@@ -81,7 +83,6 @@ const Cart: React.FC<CartProps> = ({
       );
 
       console.log("Order response:", orderResponse.data);
-
       setIsPrinting(true);
       setTimeout(() => {
         toast.dismiss(loadingToast);
@@ -110,6 +111,8 @@ const Cart: React.FC<CartProps> = ({
             "Failed to process order or update stock"
         );
       }
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -126,10 +129,10 @@ const Cart: React.FC<CartProps> = ({
         <img src={assets.logo} alt="Crown store logo" className="w-[60%]" />
       </div>
 
-      <div className="space-y-4">
+      <div className={`space-y-4`}>
         {/* Header */}
-        <div className="receipt-top flex gap-2 items-center justify-center text-center text-black border-b border-dashed pb-6">
-          <img src={assets.logo} alt="Crown store logo" className="w-8" />
+        <div className={`receipt-top flex gap-2 items-center justify-center text-center text-black border-b border-dashed ${isPrinting ? "border-t border-t-black/10 pb-4 !pt-2" : "pb-6"}`}>
+          <img src={assets.logo} alt="Crown store logo" className={`${isPrinting ? "w-10 brightness-[0%] object-contain" : "w-8 object-cover"}`} />
           <h4 className="text-lg font-semibold">Crown Store</h4>
         </div>
 
@@ -149,7 +152,7 @@ const Cart: React.FC<CartProps> = ({
             <h6 className={`${isPrinting ? "text-xs" : "text-sm"}`}>
               Selections
             </h6>
-            {!isPrinting && cart.length > 0 && (
+            {(!isPrinting && !isProcessing) && cart.length > 0 && (
               <button
                 title="Clear cart"
                 type="button"
@@ -220,7 +223,7 @@ const Cart: React.FC<CartProps> = ({
         {/* Footer */}
         <div
           className={`receipt-bottom text-[10px] ${
-            isPrinting && "border-b !h-[20mm]"
+            isPrinting && "border-b !h-[25mm]"
           }`}
         >
           <div
@@ -248,15 +251,16 @@ const Cart: React.FC<CartProps> = ({
       </div>
 
       {/* Confirm Button */}
-      {!isPrinting && cart.length > 0 && (
+      {(!isPrinting && !isProcessing) && cart.length > 0 && (
         <div className="text-center">
           <button
             title="Finish Order"
             type="button"
-            className="bg-black text-white mt-4 px-4 py-2 rounded-md text-sm"
+            disabled={isProcessing}
+            className="bg-black text-white mt-4 px-4 py-2 cursor-pointer rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleConfirmAndPrint}
           >
-            Confirm and Print
+            {isProcessing ? "Processing..." : "Confirm and Print"}
           </button>
         </div>
       )}
