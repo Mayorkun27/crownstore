@@ -33,6 +33,7 @@ const TodayOrder = () => {
   const token = localStorage.getItem('token');
   const [orderData, setOrderData] = useState<TodayOrdersData>();
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchTodayOrders = async () => {
@@ -63,6 +64,14 @@ const TodayOrder = () => {
     fetchTodayOrders();
   }, []);
 
+  const filteredProducts = orderData?.orders?.filter(order => {
+    console.log("order", order);
+    console.log("order.order_id", order.order_id)
+    return searchQuery ? order?.order_id.toLowerCase() === searchQuery.toLowerCase() : orderData.orders
+  })
+  console.log("searchQuery", searchQuery)
+  console.log("filteredProducts", filteredProducts)
+
   const Card = ({label, value}: {label:string; value:string}) => {
     return (
       <div className='w-full border border-black/20 rounded-md p-4 bg-amber-50 shadow'>
@@ -80,6 +89,15 @@ const TodayOrder = () => {
             <img src={assets.logo} alt="Crownstore logo" className='w-10 mx-auto' />
             <h4 className='text-lg font-bold leading-4'>Crown Store</h4>
           </div>
+          <input 
+            type="search" 
+            name="searchQuery" 
+            id="searchQuery" 
+            placeholder='Search by order-id...'
+            value={searchQuery}
+            className='w-1/2 py-2 border border-black/30 outline-0 indent-3 rounded-md'
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <div className="flex items-center gap-4">
             <Link
               to={"/home"}
@@ -144,7 +162,7 @@ const TodayOrder = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {orderData?.orders?.map((item) => (
+                      {filteredProducts?.map((item) => (
                         <tr key={item.order_id}>
                           <td className="px-2 lg:px-4 py-4 text-xs lg:text-sm font-medium text-gray-900">
                             {item.order_id}

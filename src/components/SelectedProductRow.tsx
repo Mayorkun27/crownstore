@@ -51,15 +51,15 @@ const SelectedProductRow = ({
 
   if (isPrinting) {
     return (
-      <tr className={`border-b flex items-center justify-between border-dashed print:border-black/50 ${rowClassName}`}>
+      <tr className={`border-b-2 flex items-center justify-between border-dashed print:border-black ${rowClassName}`}>
         <td className={`py-1 print:pr-1 ${descClassName}`}>
-          <div className="text-[10px]">
+          <div className="text-[14px]">
             <span className="print:line-clamp-none print:break-all print:overflow-hidden print:whitespace-normal print:text-left">{item}</span>
             <h4 className="print:font-bold">{totalPrice}</h4>
           </div>
         </td>
         <td className={`print:text-right print:px-0.5 ${qtyClassName}`}>
-          <small className="print:text-[10px] inline-block w-full text-right">
+          <small className="print:text-[14px] inline-block w-full text-right">
             x{quantity}
           </small>
         </td>

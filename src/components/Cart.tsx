@@ -25,7 +25,12 @@ interface CartProps {
 
 interface OrderResponse {
   message: string;
-  orderId: string;
+  order_id: string;
+}
+
+interface User {
+  id: string;
+  username: string;
 }
 
 const Cart: React.FC<CartProps> = ({
@@ -35,9 +40,14 @@ const Cart: React.FC<CartProps> = ({
   const receiptRef = useRef<HTMLDivElement | null>(null);
   const [isPrinting, setIsPrinting] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [orderId, setOrderId] = useState<string>("");
 
   const date = new Date().toLocaleDateString();
   const time = new Date().toLocaleTimeString();
+
+  const rawUser = localStorage.getItem("user");
+  const user: User | null = rawUser ? JSON.parse(rawUser) : null;
+
 
   const subTotalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -83,6 +93,8 @@ const Cart: React.FC<CartProps> = ({
       );
 
       console.log("Order response:", orderResponse.data);
+
+      setOrderId(orderResponse.data?.order_id)
       setIsPrinting(true);
       setTimeout(() => {
         toast.dismiss(loadingToast);
@@ -122,10 +134,10 @@ const Cart: React.FC<CartProps> = ({
       ref={receiptRef}
       className={`${
         isPrinting ? "print:w-[58mm] print:px-0 print:pb-4" : "w-full p-2"
-      } font-bold relative bg-white overflow-hidden rounded-lg`}
+      } font-bold relative z-2 bg-white overflow-hidden rounded-lg`}
     >
       {/* Background watermark */}
-      <div className="absolute inset-0 -z-1 flex flex-col items-center justify-center opacity-10">
+      <div className="absolute inset-0 -z-1 opacity-10 print:opacity-70 flex flex-col items-center justify-center">
         <img src={assets.logo} alt="Crown store logo" className="w-[60%]" />
       </div>
 
@@ -133,25 +145,30 @@ const Cart: React.FC<CartProps> = ({
         {/* Header */}
         <div className={`receipt-top flex gap-2 items-center justify-center text-center text-black border-b border-dashed ${isPrinting ? "border-t border-t-black/10 pb-4 !pt-2" : "pb-6"}`}>
           <img src={assets.logo} alt="Crown store logo" className={`${isPrinting ? "w-10 brightness-[0%] object-contain" : "w-8 object-cover"}`} />
-          <h4 className="text-lg font-semibold">Crown Store</h4>
+          <h4 className="text-lg font-semibold text-start leading-4">Crown Global Store</h4>
         </div>
 
         {/* Date and time */}
         <div
           className={`${
-            isPrinting ? "text-[8px]" : "text-xs"
+            isPrinting ? "text-[10px]" : "text-xs"
           } flex items-center justify-between text-black`}
         >
           <span>Date: {date}</span>
           <span>Time: {time}</span>
         </div>
 
+        <span className="text-sm">Issued By: <span className="capitalize">{user?.username}</span></span>
+
         {/* Product List */}
-        <div className="space-y-2">
+        <div className="space-y-2 mt-2">
           <div className="flex items-center justify-between">
             <h6 className={`${isPrinting ? "text-xs" : "text-sm"}`}>
               Selections
             </h6>
+            {
+              orderId && (<span>{orderId}</span>)
+            }
             {(!isPrinting && !isProcessing) && cart.length > 0 && (
               <button
                 title="Clear cart"
@@ -191,17 +208,17 @@ const Cart: React.FC<CartProps> = ({
         {/* Totals */}
         <div
           className={`py-2 ${
-            isPrinting ? "text-[10px]" : "text-xs"
+            isPrinting ? "text-[12px]" : "text-xs"
           } border-y border-dashed space-y-1`}
         >
           <li className="flex items-center justify-between">
-            <span className={`${isPrinting ? "text-[8px]" : "text-[10px]"}`}>
+            <span className={`${isPrinting ? "text-[10px]" : "text-[10px]"}`}>
               Sub Total
             </span>
             <span>{formatterUtility(subTotalPrice)}</span>
           </li>
           <li className="flex items-center justify-between">
-            <span className={`${isPrinting ? "text-[8px]" : "text-[10px]"}`}>
+            <span className={`${isPrinting ? "text-[10px]" : "text-[10px]"}`}>
               VAT (0%)
             </span>
             <span>{formatterUtility(tax)}</span>
@@ -211,7 +228,7 @@ const Cart: React.FC<CartProps> = ({
         {/* Grand Total */}
         <div
           className={`pb-2 ${
-            isPrinting ? "text-[10px]" : "text-xs"
+            isPrinting ? "text-[12px]" : "text-xs"
           } border-b border-dashed`}
         >
           <li className="flex items-center justify-between text-pryClr">

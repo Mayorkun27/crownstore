@@ -177,7 +177,7 @@ const Home = () => {
                 <div className='w-full flex items-center justify-between'>
                     <div className="flex items-center gap-2">
                         <img src={assets.logo} alt="Crownstore logo" className='w-10 mx-auto' />
-                        <h4 className='text-lg font-bold leading-4'>Crown Store</h4>
+                        <h4 className='text-lg font-bold leading-4'>Crown Global Store</h4>
                     </div>
                     <input 
                         type="search" 
