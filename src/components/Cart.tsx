@@ -78,6 +78,7 @@ const Cart: React.FC<CartProps> = ({
         product_id: item.id,
         quantity: item.quantity,
       })),
+      issued_by: user?.username,
     };
 
     try {
