@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { assets } from "../assets/assets";
 import { IoIosLogOut } from 'react-icons/io';
+import { handleLogout } from '../utilities/authHandler';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -49,6 +50,7 @@ const Layout = ({ children }: LayoutProps) => {
             <div className="flex items-center gap-4">
               <button
                 type='button'
+                onClick={handleLogout}
                 className='bg-red-600 text-white flex items-center gap-2 p-2 rounded-md'
               >
                 <IoIosLogOut />

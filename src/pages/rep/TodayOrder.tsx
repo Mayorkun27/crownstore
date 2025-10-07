@@ -6,6 +6,7 @@ import { FaStoreAlt } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { IoIosLogOut } from "react-icons/io";
+import { handleLogout } from '../../utilities/authHandler';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -89,6 +90,7 @@ const TodayOrder = () => {
             </Link>
             <button
               type='button'
+              onClick={handleLogout}
               className='bg-red-600 text-white flex items-center gap-2 p-2 rounded-md'
             >
               <IoIosLogOut />
