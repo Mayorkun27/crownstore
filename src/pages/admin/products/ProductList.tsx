@@ -154,7 +154,7 @@ const ProductList = () => {
                 </div>
             </div>
             <div className="flex flex-wrap gap-4 mb-8">
-                {['all', 'seasoning', 'oil', 'foodstuff'].map((category) => (
+                {['all', 'seasoning', 'oil', 'foodstuff', 'others'].map((category) => (
                 <button
                     key={category}
                     type="button"

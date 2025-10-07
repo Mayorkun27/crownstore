@@ -215,7 +215,7 @@ const Home = () => {
                 </div>
             </header>
             <div className="py-4 flex items-center md:justify-center gap-4 overflow-x-scroll styled-scrollbar">
-                {['all', 'seasoning', 'oil', 'foodstuff'].map((category) => (
+                {['all', 'seasoning', 'oil', 'foodstuff', 'others'].map((category) => (
                 <button
                     key={category}
                     type="button"

@@ -341,6 +341,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ productData, onSuccess, onCan
                     <option value="seasoning">seasoning</option>
                     <option value="oil">oil</option>
                     <option value="foodstuffs">foodstuffs</option>
+                    <option value="others">others</option>
                   </select>
                   {formik.touched.category && formik.errors.category && (
                       <p className="text-red-500 text-sm mt-1">{formik.errors.category}</p>
