@@ -457,10 +457,10 @@ const Cart: React.FC<CartProps> = ({
               isPrinting ? "flex-col" : "flex-row"
             } flex items-center justify-between`}
           >
-            <h6 className={`${isPrinting ? "text-[6px]" : ""}`}>
+            <h6 className={`${isPrinting ? "text-[8px]" : ""}`}>
               Thank you for your visit!
             </h6>
-            <small className={`${isPrinting ? "text-[6px]" : "text-[6px]"}`}>
+            <small className={`${isPrinting ? "text-[8px]" : "text-[6px]"}`}>
               Please keep the receipts for your records
             </small>
           </div>
