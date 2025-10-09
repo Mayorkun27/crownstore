@@ -4,6 +4,7 @@ import { GoPlus } from 'react-icons/go'
 import { PiMinusThin } from 'react-icons/pi'
 import { BiPencil } from 'react-icons/bi'; // Icon for Update
 import { formatterUtility } from '../utilities/formatterutility'; // Assuming this is correct
+import { useLocation } from "react-router-dom";
 
 // Define the shape of the product data object passed to actions
 interface ProductData {
@@ -53,6 +54,8 @@ const ProductRow = ({
     decreaseAction, 
     removeAction 
 }: ProductRowProps) => {
+    const location = useLocation();
+
     const productData: ProductData = { id, items, price, in_stock, total_sold, category }; 
     const remainingQuantity = Number(in_stock) - Number(total_sold);
     const isOutOfStock = remainingQuantity <= 0;
@@ -64,7 +67,7 @@ const ProductRow = ({
 
     return (
         <tr className="hover:bg-yellow-50/50 transition-all duration-200 border-y border-black/20 last:border-b-0 first:border-t-0">
-            <td className="px-6 py-2 text-left text-sm font-medium truncate">{items}</td>
+            <td className="md:px-6 px-2 py-2 text-left text-sm font-medium">{items}</td>
             <td className="px-6 py-2 text-left text-sm">{formatterUtility(Number(price))}</td>
             <td className="px-6 py-2 text-left text-sm">{remainingQuantity}</td>
             {/* <td className="px-6 py-2 text-left text-sm">{in_stock}</td> */}
@@ -91,7 +94,7 @@ const ProductRow = ({
                         <button 
                             title='Remove from Cart'
                             type='button'
-                            className='border text-s cursor-pointer w-8 h-8 rounded-full flex items-center justify-center hover:back-red hover:text-white border-red-600 text-red-600'
+                            className='border text-s cursor-pointer w-8 h-8 rounded-full flex items-center justify-center back-hover-red hover:text-white border-red-600 text-red-600'
                             onClick={removeAction}
                         >
                             <CiTrash />
@@ -101,7 +104,7 @@ const ProductRow = ({
                     // Logic for items in the product list
                     <div className="flex gap-2 justify-start">
                         {
-                            role === "admin" ? (
+                            role === "admin" && location.pathname !== "/home" ? (
                                 <>
                                     <button
                                         className={`${baseButtonClass} bg-black text-white`}
@@ -109,7 +112,7 @@ const ProductRow = ({
                                         title="Update Product Details"
                                     >
                                         <BiPencil />
-                                        Update
+                                        <span className="md:inline-flex hidden">Update</span>
                                     </button>
 
                                     <button
@@ -119,7 +122,7 @@ const ProductRow = ({
                                         title={isDeleting ? "Deleting..." : "Delete Product"}
                                     >
                                         <CiTrash />
-                                        {isDeleting ? "Deleting..." : "Delete"}
+                                        <span className="md:inline-flex hidden">{isDeleting ? "Deleting..." : "Delete"}</span>
                                     </button>
                                 </>
                             ) : (

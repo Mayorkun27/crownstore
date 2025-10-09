@@ -12,6 +12,10 @@ const Layout = ({ children }: LayoutProps) => {
 
   const navLinks = [
     {
+      name: "Shop",
+      path: "/home",
+    },
+    {
       name: "Manage Products",
       path: "/adminhome",
     },
@@ -58,7 +62,7 @@ const Layout = ({ children }: LayoutProps) => {
               </button>
             </div>
         </div>
-        <ul className="md:hidden flex gap-4">
+        <ul className="md:hidden w-full pb-1 flex gap-4 overflow-x-auto whitespace-nowrap">
           {
             navLinks.map((link, index) => (
               <li key={index}>

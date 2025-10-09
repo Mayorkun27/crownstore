@@ -30,6 +30,8 @@ const Home = () => {
     const [availableProducts, setAvailableProducts] = useState<ProductProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const role = localStorage.getItem("role")
+
     useEffect(() => {
         const fetchProducts = async () => {
         try {
@@ -189,7 +191,7 @@ const Home = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                     <Link
-                        to={"/today"}
+                        to={role === "admin" ? "/adminhome" : "/today"}
                         className='bg-black text-white flex items-center gap-2 p-2 rounded-md'
                     >
                         <FaPersonWalking />

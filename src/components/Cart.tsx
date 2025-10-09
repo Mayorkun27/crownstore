@@ -30,6 +30,7 @@ interface OrderResponse {
 
 interface User {
   id: string;
+  role: string;
   username: string;
 }
 
@@ -41,6 +42,7 @@ const Cart: React.FC<CartProps> = ({
   const [isPrinting, setIsPrinting] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderId, setOrderId] = useState<string>("");
+  const [discountPrice, setDiscountPrice] = useState<number>(0);
 
   const date = new Date().toLocaleDateString();
   const time = new Date().toLocaleTimeString();
@@ -79,6 +81,7 @@ const Cart: React.FC<CartProps> = ({
         quantity: item.quantity,
       })),
       issued_by: user?.username,
+      discount: discountPrice,
     };
 
     try {
@@ -224,7 +227,24 @@ const Cart: React.FC<CartProps> = ({
             </span>
             <span>{formatterUtility(tax)}</span>
           </li>
+          <li className="flex items-center justify-between">
+            <span className={`${isPrinting ? "text-[10px]" : "text-[10px]"}`}>
+              Discount
+            </span>
+            <span>{formatterUtility(discountPrice)}</span>
+          </li>
         </div>
+
+        {
+          user?.role === "admin" && !isPrinting && (
+            <input 
+              type="number" 
+              className={`border w-full h-[40px] rounded-md border-black/30 indent-2 text-xs placeholder:font-medium`}
+              placeholder="Specify discount amount here if it applies"
+              onChange={(e) => setDiscountPrice(Number(e.currentTarget.value))}
+            />
+          )
+        }
 
         {/* Grand Total */}
         <div
@@ -234,7 +254,7 @@ const Cart: React.FC<CartProps> = ({
         >
           <li className="flex items-center justify-between text-pryClr">
             <span>Total</span>
-            <h4>{formatterUtility(subTotalPrice + tax)}</h4>
+            <h4>{formatterUtility((subTotalPrice + tax) - discountPrice)}</h4>
           </li>
         </div>
 

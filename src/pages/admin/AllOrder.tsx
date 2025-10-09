@@ -14,6 +14,7 @@ interface Order {
   order_id: string;
   items: OrderProduct[];
   total_amount: string;
+  discount: string;
   created_at: string;
   issued_by: string;
 }
@@ -145,6 +146,9 @@ const AllOrder = () => {
                             T. Amount
                           </th>
                           <th className="px-2 py-3 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                            Discount
+                          </th>
+                          <th className="px-2 py-3 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
                             Date
                           </th>
                           <th className="px-2 py-3 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
@@ -173,12 +177,15 @@ const AllOrder = () => {
                               #{item.total_amount}
                             </td>
                             <td className="px-2 py-4 text-xs lg:text-sm text-gray-500">
+                              {item?.discount ? `#${item.discount.toLocaleString()}` : "-"}
+                            </td>
+                            <td className="px-2 py-4 text-xs lg:text-sm text-gray-500">
                               {item.created_at.split(" ")[0]}
                             </td>
                             <td className="px-2 py-4 text-xs lg:text-sm text-gray-500">
                               {item.created_at.split(" ")[1]}
                             </td>
-                            <td className="px-2 py-4 text-xs lg:text-sm text-gray-500">
+                            <td className="px-2 py-4 text-xs lg:text-sm text-gray-500 capitalize">
                               {item.issued_by}
                             </td>
                           </tr>
