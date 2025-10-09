@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { FaPhone } from "react-icons/fa6";
+import { FaLocationDot, FaPhone } from "react-icons/fa6";
 import SelectedProductRow from "./SelectedProductRow";
 import { formatterUtility } from "../utilities/formatterutility";
 import { assets } from "../assets/assets";
@@ -284,6 +284,14 @@ const Cart: React.FC<CartProps> = ({
           >
             <FaPhone size={12} />
             <small className="leading-2 max-w-3/5">08136758977</small>
+          </div>
+          <div
+            className={`flex gap-2 justify-center items-center mt-2 ${
+              isPrinting ? "text-xs" : "text-sm"
+            }`}
+          >
+            <FaLocationDot size={12} />
+            <small className="leading-3 max-w-3/4 text-center">No 1, Bisi omiyale Drive, Beside lapo microfinance bank, West Bypass, Osogbo</small>
           </div>
         </div>
       </div>
