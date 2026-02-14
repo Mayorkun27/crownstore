@@ -34,10 +34,7 @@ interface User {
   username: string;
 }
 
-const Cart: React.FC<CartProps> = ({
-  cart,
-  handleClearCart,
-}) => {
+const Cart: React.FC<CartProps> = ({ cart, handleClearCart }) => {
   const receiptRef = useRef<HTMLDivElement | null>(null);
   const [isPrinting, setIsPrinting] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -50,15 +47,14 @@ const Cart: React.FC<CartProps> = ({
   const rawUser = localStorage.getItem("user");
   const user: User | null = rawUser ? JSON.parse(rawUser) : null;
 
-
   const subTotalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
   const tax = 0;
 
   const handleConfirmAndPrint = async () => {
-    setIsProcessing(true)
+    setIsProcessing(true);
     if (cart.length === 0) {
       toast.error("Cart is empty. Please add items before confirming.");
       return;
@@ -93,12 +89,12 @@ const Cart: React.FC<CartProps> = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       console.log("Order response:", orderResponse.data);
 
-      setOrderId(orderResponse.data?.order_id)
+      setOrderId(orderResponse.data?.order_id);
       setIsPrinting(true);
       setTimeout(() => {
         toast.dismiss(loadingToast);
@@ -124,7 +120,7 @@ const Cart: React.FC<CartProps> = ({
       } else {
         toast.error(
           error.response?.data?.message ||
-            "Failed to process order or update stock"
+            "Failed to process order or update stock",
         );
       }
     } finally {
@@ -147,9 +143,17 @@ const Cart: React.FC<CartProps> = ({
 
       <div className={`space-y-4`}>
         {/* Header */}
-        <div className={`receipt-top flex gap-2 items-center justify-center text-center text-black border-b border-dashed ${isPrinting ? "border-t border-t-black/10 pb-4 !pt-2" : "pb-6"}`}>
-          <img src={assets.logo} alt="Crown store logo" className={`${isPrinting ? "w-10 brightness-[0%] object-contain" : "w-8 object-cover"}`} />
-          <h4 className="text-lg font-semibold text-start leading-4">Crown Global Store</h4>
+        <div
+          className={`receipt-top flex gap-2 items-center justify-center text-center text-black border-b border-dashed ${isPrinting ? "border-t border-t-black/10 pb-4 !pt-2" : "pb-6"}`}
+        >
+          <img
+            src={assets.logo}
+            alt="Crown store logo"
+            className={`${isPrinting ? "w-10 brightness-[0%] object-contain" : "w-8 object-cover"}`}
+          />
+          <h4 className="text-lg font-semibold text-start leading-4">
+            Crown Global Store
+          </h4>
         </div>
 
         {/* Date and time */}
@@ -162,7 +166,9 @@ const Cart: React.FC<CartProps> = ({
           <span>Time: {time}</span>
         </div>
 
-        <span className="text-sm">Issued By: <span className="capitalize">{user?.username}</span></span>
+        <span className="text-sm">
+          Issued By: <span className="capitalize">{user?.username}</span>
+        </span>
 
         {/* Product List */}
         <div className="space-y-2 mt-2">
@@ -170,10 +176,8 @@ const Cart: React.FC<CartProps> = ({
             <h6 className={`${isPrinting ? "text-xs" : "text-sm"}`}>
               Selections
             </h6>
-            {
-              orderId && (<span>{orderId}</span>)
-            }
-            {(!isPrinting && !isProcessing) && cart.length > 0 && (
+            {orderId && <span>{orderId}</span>}
+            {!isPrinting && !isProcessing && cart.length > 0 && (
               <button
                 title="Clear cart"
                 type="button"
@@ -235,16 +239,14 @@ const Cart: React.FC<CartProps> = ({
           </li>
         </div>
 
-        {
-          user?.role === "admin" && !isPrinting && (
-            <input 
-              type="number" 
-              className={`border w-full h-[40px] rounded-md border-black/30 indent-2 text-xs placeholder:font-medium`}
-              placeholder="Specify discount amount here if it applies"
-              onChange={(e) => setDiscountPrice(Number(e.currentTarget.value))}
-            />
-          )
-        }
+        {user?.role === "admin" && !isPrinting && (
+          <input
+            type="number"
+            className={`border w-full h-[40px] rounded-md border-black/30 indent-2 text-xs placeholder:font-medium`}
+            placeholder="Specify discount amount here if it applies"
+            onChange={(e) => setDiscountPrice(Number(e.currentTarget.value))}
+          />
+        )}
 
         {/* Grand Total */}
         <div
@@ -254,7 +256,7 @@ const Cart: React.FC<CartProps> = ({
         >
           <li className="flex items-center justify-between text-pryClr">
             <span>Total</span>
-            <h4>{formatterUtility((subTotalPrice + tax) - discountPrice)}</h4>
+            <h4>{formatterUtility(subTotalPrice + tax - discountPrice)}</h4>
           </li>
         </div>
 
@@ -291,13 +293,16 @@ const Cart: React.FC<CartProps> = ({
             }`}
           >
             <FaLocationDot size={12} />
-            <small className="leading-3 max-w-3/4 text-center">No 1, Bisi omiyale Drive, Beside lapo microfinance bank, West Bypass, Osogbo</small>
+            <small className="leading-3 max-w-3/4 text-center">
+              No 1, Bisi omiyale Drive, Beside lapo microfinance bank,
+              West Bypass, Osogbo
+            </small>
           </div>
         </div>
       </div>
 
       {/* Confirm Button */}
-      {(!isPrinting && !isProcessing) && cart.length > 0 && (
+      {!isPrinting && !isProcessing && cart.length > 0 && (
         <div className="text-center">
           <button
             title="Finish Order"
