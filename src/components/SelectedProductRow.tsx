@@ -23,8 +23,7 @@
 
 // export default SelectedProductRow
 
-
-import { formatterUtility } from '../utilities/formatterutility';
+import { formatterUtility } from "../utilities/formatterutility";
 
 interface SelectedProductRowProps {
   id: number;
@@ -43,22 +42,28 @@ const SelectedProductRow = ({
   quantity,
   price,
   isPrinting,
-  rowClassName = '',
-  descClassName = '',
-  qtyClassName = '',
+  rowClassName = "",
+  descClassName = "",
+  qtyClassName = "",
 }: SelectedProductRowProps) => {
   const totalPrice = formatterUtility(Number(price) * Number(quantity));
-
   if (isPrinting) {
     return (
-      <tr className={`border-b-2 flex items-center justify-between border-dashed print:border-black ${rowClassName}`}>
+      <tr
+        className={`border-b-2 flex items-center justify-between border-dashed print:border-black ${rowClassName}`}
+      >
         <td className={`py-1 print:pr-1 ${descClassName}`}>
           <div className="text-[14px]">
-            <span className="print:line-clamp-none print:break-all print:overflow-hidden print:whitespace-normal print:text-left">{item}</span>
-            <h4 className="print:font-bold">{totalPrice}</h4>
+            <span className="print:line-clamp-none print:break-all print:overflow-hidden print:whitespace-normal print:text-left">
+              {item}
+            </span>
+            <h4 className="print:font-bold">{price}</h4>
           </div>
         </td>
         <td className={`print:text-right print:px-0.5 ${qtyClassName}`}>
+          <small className="print:text-[14px] inline-block w-full text-right">
+            x{totalPrice}
+          </small>
           <small className="print:text-[14px] inline-block w-full text-right">
             x{quantity}
           </small>
@@ -72,9 +77,12 @@ const SelectedProductRow = ({
     <div className="flex items-center justify-between py-2 border-b border-b-black text-xs group hover:cursor-pointer transition-all duration-300 last:border-b-0 last:pb-0">
       <div className="flex flex-col items-start justify-between w-2/3">
         <p className="line-clamp-1">{item}</p>
-        <h4 className="w-1/3 text-start">{totalPrice}</h4>
+        <h4 className="w-1/3 text-start">{price}</h4>
       </div>
-      <small>X{quantity}</small>
+      <div className="flex items-center gap-3">
+        <small>{totalPrice}</small>
+        <small>X{quantity}</small>
+      </div>
     </div>
   );
 };
